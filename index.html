@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김동엽 | AI 기반 문제 해결 전문가</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .section-title {
+            font-size: 2.25rem; /* 36px */
+            font-weight: 700;
+            margin-bottom: 2.5rem; /* 40px */
+            text-align: center;
+        }
+        .company-section-title {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 600;
+            margin-top: 3rem; /* 48px */
+            margin-bottom: 1.5rem; /* 24px */
+            padding-bottom: 0.5rem; /* 8px */
+            border-bottom: 2px solid #e2e8f0; /* slate-200 */
+            color: #1e3a8a; /* blue-800 */
+        }
+        .company-section-title:first-of-type {
+            margin-top: 0;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* 12px */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 2.5rem; /* 40px */
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 0.75rem; /* 12px */
+            position: relative;
+        }
+        .modal-content ul {
+            padding-left: 1.5rem; /* list-disc 와 함께 사용시 적절한 여백 */
+        }
+        .modal-content li {
+            margin-bottom: 0.5rem; /* 각 항목 간 간격 */
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .skill-tag {
+            background-color: #e0f2fe; /* light blue */
+            color: #0c4a6e; /* dark blue */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+            display: inline-block;
+        }
+        /* Timeline */
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 2.5rem; /* Space for the line and dot */
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-item::before { /* Vertical line */
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.25rem;
+            bottom: 0;
+            width: 2px;
+            background-color: #cbd5e1; /* gray-300 */
+        }
+        .timeline-item:last-child::before {
+             height: calc(100% - 2rem); /* Adjust for last item */
+        }
+        .timeline-dot {
+            position: absolute;
+            left: calc(0.5rem - 0.375rem + 1px); /* Center the dot on the line */
+            top: 0.25rem;
+            width: 0.75rem; /* 12px */
+            height: 0.75rem; /* 12px */
+            background-color: #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .nav-item {
+            transition: color 0.3s ease;
+        }
+        .nav-item:hover {
+            color: #3b82f6; /* blue-500 */
+        }
+        .project-detail-image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjusted minmax for smaller images */
+            gap: 0.75rem; /* Adjusted gap */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .project-detail-image-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer; /* Indicate images are clickable */
+        }
+        /* Simple Image Modal Styles */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001; /* Higher than project modal */
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .image-modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        .image-modal-content, #caption {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform:scale(0)}
+            to {transform:scale(1)}
+        }
+        .image-modal .close-button { /* Re-style close button for image modal */
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        /* 개조식 표현을 위한 스타일 */
+        .modal-content .subsection-title {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 600;
+            color: #1e3a8a; /* blue-800 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .modal-content .subsection-content ul {
+            list-style-type: disc;
+            padding-left: 1.25rem; /* 20px */
+        }
+        .modal-content .subsection-content p,
+        .modal-content .subsection-content li {
+            line-height: 1.6;
+            margin-bottom: 0.5rem; /* 8px */
+        }
+         .modal-content .subsection-content ul ul { /* Nested lists */
+            list-style-type: circle;
+            padding-left: 1.25rem; /* 20px */
+            margin-top: 0.25rem;
+        }
+        .achievement-highlight-card { /* 변경된 스타일 클래스명 */
+            background-color: #f9fafb; /* gray-50 */
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 1.25rem; /* p-5 */
+            border-radius: 0.5rem; /* rounded-lg */
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        .achievement-highlight-card:hover {
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .achievement-highlight-card svg {
+            width: 2rem; /* w-8 */
+            height: 2rem; /* h-8 */
+            margin-right: 1rem; /* mr-4 */
+            color: #2563eb; /* blue-600 */
+            flex-shrink: 0; /* 아이콘 크기 고정 */
+        }
+        .achievement-highlight-card p {
+            margin-bottom: 0; /* 기본 p 태그 마진 제거 */
+        }
+
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">김동엽</a>
+            <div class="space-x-4 text-lg">
+                <a href="#home" class="nav-item">홈</a>
+                <a href="#about" class="nav-item">소개</a>
+                <a href="#projects" class="nav-item">프로젝트</a>
+                <a href="#skills" class="nav-item">기술</a>
+                <a href="#experience" class="nav-item">경험</a>
+                <a href="#contact" class="nav-item">연락처</a>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="min-h-screen flex items-center bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                데이터로 인간의 욕구를 찾아내고,<br class="hidden md:block"> AI로 해결책을 <span class="text-sky-300">직접</span> 만듭니다.
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">
+                아이디어를 기획에 그치지 않고, 직접 프로토타입을 만들어 시장의 반응을 확인하고 서비스를 성장시키는 과정에 가장 큰 희열을 느낍니다.
+            </p>
+            <a href="#projects" class="bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg text-lg hover:bg-sky-100 transition duration-300">
+                프로젝트 보기
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-slate-800">소개 (About Me)</h2>
+            <div class="flex flex-col md:flex-row gap-10 items-start">
+                <div class="w-full md:w-1/3 flex flex-col items-center md:items-start md:sticky md:top-24"> {/* 사진과 학력/자격증을 왼쪽에 고정 */}
+                    <img src="https://placehold.co/300x300/E2E8F0/334155?text=김동엽님+프로필+사진" alt="김동엽 프로필 사진" class="rounded-full shadow-lg w-60 h-60 md:w-64 md:h-64 object-cover mb-6">
+                    <div class="w-full text-center md:text-left">
+                        <h3 class="text-xl font-semibold mb-2 text-slate-800">학력</h3>
+                        <p class="text-slate-700 mb-4">홍익대학교 경영학과 졸업 (2016.03 - 2022.08)</p>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-800">수상 및 자격증</h3>
+                        <ul class="list-disc list-inside ml-4 text-slate-700 text-left">
+                            <li>투자자산운용사 (2024.06)</li>
+                            <li>육군 창업경진대회 '한국경제신문사장상' (2019.12)</li>
+                            <li>영어 Opic IH (2024.09)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <p class="text-lg mb-8 text-slate-700 leading-relaxed">
+                        안녕하세요, 김동엽입니다. 저는 사용자의 '왜?'라는 질문에서 출발해 데이터로 본질을 파악하고, AI 기술을 활용하여 실제적인 해결책을 만들어내는 것에 집중합니다. 도전을 통해 인간을 이해하고, 고객 중심의 가치를 창출하는 것을 최우선으로 생각하며, 어제보다 발전하는 오늘을 만들기 위해 노력합니다.
+                    </p>
+                    
+                    <h3 class="text-2xl font-semibold mb-4 text-slate-800 border-b pb-2">핵심 역량</h3>
+                    <div class="space-y-5 mb-10">
+                        <div>
+                            <h4 class="text-xl font-semibold text-blue-700 mb-1">1. 고객 가치를 발견하는 힘 (기획/전략)</h4>
+                            <ul class="list-disc list-inside ml-4 text-slate-600 space-y-1 text-base">
+                                <li><span class="font-medium">사용자 중심 설계:</span> 고객 니즈/Pain Point의 근본 원인(Why) 탐구 기반 가치 설계. 사용자 인터뷰 ~ 프로토타입 검증 전 과정 주도.</li>
+                                <li><span class="font-medium">데이터 기반 의사결정:</span> 핵심 문제 정의 → 가설 수립 → 검증 → 실행 사이클 주도. 데이터 기반 의사결정으로 서비스 개선 및 성장 견인.</li>
+                                <li><span class="font-medium">AI 프로덕트 기획/전략 실행:</span> AI 기술(LLM, RAG) 기반 사용자 가치 중심 AI 서비스 기획. 시장 분석 및 경쟁 우위 전략 포함, 구체적 로드맵 수립 및 성공적 실행.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-blue-700 mb-1">2. 아이디어를 현실로 만드는 힘 (실행/개발)</h4>
+                            <ul class="list-disc list-inside ml-4 text-slate-600 space-y-1 text-base">
+                                <li><span class="font-medium">AI 솔루션 개발 및 기술 리더십:</span> AI 모델/서비스 프로토타이핑(React, Django, Python) 직접 수행. 엔지니어링팀 기술 협업 및 개발 방향 제시.</li>
+                                <li><span class="font-medium">엔드투엔드 프로젝트 관리/실행:</span> 목표 설정 → MVP 개발 → 출시 → 그로스 해킹 → 성과 측정 → 회고까지 전 과정 리딩 및 성공적 목표 달성.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold mb-4 text-slate-800 border-b pb-2">주요 성과 하이라이트</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="achievement-highlight-card">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.608a8.287 8.287 0 0 0 3 2.472A8.288 8.288 0 0 0 12 12a8.288 8.288 0 0 0 2.962-.892A8.252 8.252 0 0 1 15.362 5.214Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 12H4.5m7.5 0H21M12 12V4.5m0 7.5V21" />
+                              </svg>                              
+                            <p class="text-slate-700"><strong class="font-semibold text-blue-700">220만+ 뷰 콘텐츠 제작:</strong><br>LCK CRACKER 채널 성장 견인 (데이터 기반 분석 및 기획)</p>
+                        </div>
+                        <div class="achievement-highlight-card">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                              </svg>                              
+                            <p class="text-slate-700"><strong class="font-semibold text-blue-700">초기 유저 2만 명 (홍보비 0원):</strong><br>'Butler' 서비스 팬덤 기반 시장 진입 성공 (전략 기획 및 실행)</p>
+                        </div>
+                        <div class="achievement-highlight-card">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                            </svg>
+                            <p class="text-slate-700"><strong class="font-semibold text-blue-700">AI 자소서 서비스 MVP 출시:</strong><br>1인 개발로 아이디어 구현 및 사용자 만족 피드백 확보</p>
+                        </div>
+                         <div class="achievement-highlight-card">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                            </svg>
+                            <p class="text-slate-700"><strong class="font-semibold text-blue-700">보이스피싱 100% 탐지 모델:</strong><br>LLM 및 BDI 분석 결합 (테스트 데이터셋 기준)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 bg-slate-100">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-slate-800">프로젝트 (Projects)</h2>
+            <div id="project-groups-container">
+                </div>
+        </div>
+    </section>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content overflow-y-auto max-h-[90vh]">
+            <span class="close-button" onclick="closeProjectModal()">&times;</span>
+            <div id="modal-body">
+                </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-button" onclick="closeImageModal()">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+    </div>
+
+
+    <section id="skills" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-slate-800">기술 스택 (Skills)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">AI / ML</h3>
+                    <span class="skill-tag">LLM</span><span class="skill-tag">RAG</span><span class="skill-tag">BDI Reasoning Distillation</span><span class="skill-tag">LoRA Fine-tuning</span><span class="skill-tag">Multi-Agent Systems</span><span class="skill-tag">LangChain</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Programming Languages & Frameworks</h3>
+                    <span class="skill-tag">Python</span><span class="skill-tag">Django</span><span class="skill-tag">React</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Data Analysis & Visualization</h3>
+                    <span class="skill-tag">Google Analytics</span><span class="skill-tag">Excel</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Design & Prototyping</h3>
+                    <span class="skill-tag">Figma</span>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Collaboration & Productivity</h3>
+                    <span class="skill-tag">Notion</span><span class="skill-tag">Slack</span><span class="skill-tag">MS Office (Word, PowerPoint)</span><span class="skill-tag">Google Drive API</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">Others</h3>
+                    <span class="skill-tag">Adobe Premiere</span><span class="skill-tag">콘텐츠 마케팅</span><span class="skill-tag">커뮤니티 운영</span><span class="skill-tag">그로스 해킹</span><span class="skill-tag">스토리텔링</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-20 bg-slate-100">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-slate-800">경험 (Experience)</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">PUZZ 퍼즐시스템즈</h3>
+                    <p class="text-sm text-slate-500 mb-1">AI 연구 (정규직) | 2024.12 - 재직 중 (6개월)</p>
+                    <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>내부 문서 기반 AI 인사이트/리포트 생성 서비스 프로토타입 개발</li>
+                        <li>LLM의 BDI 분석을 통한 Voice Phishing 100% 탐지 모델 개발</li>
+                        <li>Open Source 모델 학습 및 RAG를 통한 TBM 생성 AI 제작 주도</li>
+                        <li>Multi-Agent를 활용한 앱 개발 방법론 고안 및 아키텍처 설계</li>
+                    </ul>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">개인 프로젝트</h3>
+                    <p class="text-sm text-slate-500 mb-1">PO, 1인 개발 | 2024.11 - 2025.02 (4개월)</p>
+                    <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>AI 자기소개서 작성 서비스 제작 (LangChain 활용)</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">유튜브 채널 'LCK CRACKER'</h3>
+                    <p class="text-sm text-slate-500 mb-1">PM (정규직) | 2023.01 - 2024.01 (1년 1개월)</p>
+                     <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>FAKER의 비밀 분석 콘텐츠 기획 및 200만 뷰 달성</li>
+                        <li>조회 수 40만 롱폼 영상 제작을 통한 구독자 유지 및 신규 팬 유입</li>
+                        <li>종목 내 신규 데이터 지표 '골드 수급률' 개발 및 공식 채널 반영 기여</li>
+                        <li>채널 개설 6개월 만에 구독자 5,000명 확보 전략 실행</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">주식회사그로잉랩</h3>
+                    <p class="text-sm text-slate-500 mb-1">서비스 기획 (정규직) | 2021.07 - 2022.12 (1년 6개월)</p>
+                     <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>주식 분석 서비스 'Butler' 초기 유저 20,000명 확보 전략 기획 및 실행 (홍보비 0원)</li>
+                        <li>데이터 기반 메인 페이지 개선 프로젝트 리딩, '버틀러' 유저 참여도 지표 80% 증가</li>
+                        <li>시장 분석 통한 신규 기능 출시 주도, 유저 참여도 117% 및 평균 참여시간 67% 증가</li>
+                        <li>분석 서비스 '버틀러(butler.works)' 초기 서비스 기획 핵심 역할 수행</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">재단법인 아산나눔재단</h3>
+                    <p class="text-sm text-slate-500 mb-1">인턴 | 2020.08 - 2021.02 (7개월)</p>
+                    <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>MARU 180 입주 스타트업 지원</li>
+                        <li>MARU 180 내 행사 개최 및 운영</li>
+                    </ul>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">육군 창업경진대회</h3>
+                    <p class="text-sm text-slate-500 mb-1">'한국경제신문사장상' 수상 | 2019.12</p>
+                    <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
+                        <li>생고기 배달서비스 '레고' 아이디어로 수상</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="section-title text-white">연락처 (Contact)</h2>
+            <p class="text-xl mb-8 max-w-xl mx-auto">
+                새로운 기회에 대해 이야기하거나 궁금한 점이 있으시면 언제든지 편하게 연락주세요.
+            </p>
+            <div class="space-y-4 md:space-y-0 md:space-x-8 flex flex-col md:flex-row justify-center items-center">
+                <a href="mailto:gooodong3@gmail.com" class="bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg text-lg hover:bg-sky-100 transition duration-300 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                    </svg>
+                    gooodong3@gmail.com
+                </a>
+                <a href="tel:010-3387-1909" class="bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg text-lg hover:bg-sky-100 transition duration-300 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                    </svg>
+                    010-3387-1909
+                </a>
+                </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-800 text-slate-300 py-8 text-center">
+        <p>&copy; <span id="currentYear"></span> 김동엽. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const projectsData = [
+            // PUZZ 퍼즐시스템즈 Projects
+            {
+                id: "puzz_insight_reporter",
+                company: "PUZZ 퍼즐시스템즈",
+                title: "내부 문서 기반 AI 인사이트/리포트 생성 서비스 프로토타입",
+                shortDesc: "사내 방대한 문서를 똑똑하게 분석하여, 필요한 인사이트만 빠르게 찾아주는 AI 비서",
+                image: "https://placehold.co/600x400/A5B4FC/1E293B?text=AI+인사이트+리포터+UI",
+                duration: "2025.04 - 2025.05 (1개월)",
+                role: "AI 연구, 1인 개발",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견:</strong> 내부 자료 검색 및 보고서 작성 업무의 현저한 비효율성 확인.</li>
+                        <li><strong>문제 정의:</strong> AI 기술을 활용하여 내부 문서 기반 인사이트 도출을 자동화하고, 이를 통해 팀원들이 핵심 업무에 더 집중할 수 있는 환경 조성이 필요하다고 판단.</li>
+                        <li><strong>목표:</strong> 정보 접근성 향상 및 보고서 작성 시간 단축을 위한 AI 프로토타입 개발.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> 'RAG(Retrieval Augmented Generation) 기술과 Vector DB를 활용하면, 내부 문서에서 의미 기반 검색 및 정확한 정보 추출이 가능하여 인사이트 도출 및 리포트 생성을 자동화할 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행 (1인 개발):</strong>
+                            <ul>
+                                <li>프로젝트 기획 및 시스템 아키텍처 설계 (임베딩/RAG 중심).</li>
+                                <li>Google Drive API 연동 및 Vector DB 구축.</li>
+                                <li>정보 추출 알고리즘 개발.</li>
+                                <li>React, Django 기반 프로토타입 신속 구현.</li>
+                            </ul>
+                        </li>
+                        <li><strong>결과 공유:</strong> 개발된 프로토타입 팀 공유 및 기술적 검증 완료. 팀 전체 개발 목표 및 범위에 대한 명확한 합의 도출.</li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>아이디어 실현 가능성 신속 검증 (단독 프로토타입 개발).</li>
+                        <li>업무 효율 증대 가능성 제시 및 팀 AI 도입 기대감 고취.</li>
+                        <li>팀 기술 방향성 설정 및 개발 범위 성공적 합의 도출.</li>
+                    </ul>`,
+                techStack: ["LLM", "RAG", "Python", "Django", "React", "Vector DB", "Google Drive API"],
+                detailedImages: [], 
+                visuals_needed: ["프로토타입 UI 스크린샷", "시스템 아키텍처 다이어그램", "시연 GIF/짧은 영상"]
+            },
+            {
+                id: "puzz_voice_phishing",
+                company: "PUZZ 퍼즐시스템즈",
+                title: "LLM의 BDI 분석을 통한 Voice Phishing 100% 탐지 모델",
+                shortDesc: "지능화되는 보이스피싱, AI가 발화 의도까지 파악하여 100% 막아냅니다.",
+                image: "https://placehold.co/600x400/FCA5A5/1E293B?text=보이스피싱+탐지+모델+개념도",
+                duration: "2025.03 - 2025.04 (1개월)",
+                role: "AI 연구, 팀 리더",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견:</strong> 기존 보이스피싱 탐지 모델의 정확도 한계 및 패턴 지능화로 인한 탐지율 저하.</li>
+                        <li><strong>문제 정의:</strong> 단순 키워드/패턴 매칭 방식으로는 진화하는 보이스피싱에 효과적으로 대응하기 어려움. 발화의 맥락과 의도 파악 가능한 새로운 탐지 모델 필요.</li>
+                        <li><strong>목표:</strong> LLM과 BDI 분석을 결합하여 보이스피싱 탐지 정확도 극대화.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> 'LLM의 언어 이해 능력과 BDI(Belief, Desire, Intention) 모델의 발화 의도 추론 능력을 결합하면, 보이스피싱 발화의 미묘한 특징까지 포착하여 탐지율을 획기적으로 높일 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행 (팀 리딩):</strong>
+                            <ul>
+                                <li>3인 팀 리드, 프로젝트 관리 및 모델 목적 정의.</li>
+                                <li>데이터 수집/전처리, 학습 및 개발 전 과정 주도.</li>
+                                <li>BDI Reasoning Distillation 및 LoRA Fine-tuning 신규 탐지 방식 직접 설계 및 적용.</li>
+                            </ul>
+                        </li>
+                        <li><strong>팀 운영:</strong> 명확한 역할 분담 및 주기적 진행 상황 공유로 효율적 팀워크 구축.</li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>테스트 데이터셋 기준, <strong>보이스피싱 발화 100% 탐지</strong> 성공.</li>
+                        <li>기존 모델 한계 극복 가능한 새로운 탐지 패러다임 제시.</li>
+                    </ul>`,
+                techStack: ["LLM (3B)", "BDI Reasoning Distillation", "LoRA Fine-tuning", "Python"],
+                detailedImages: [],
+                visuals_needed: ["BDI 모델 개념도", "탐지 성능 비교 그래프", "모델 학습 과정 플로우 차트"]
+            },
+            {
+                id: "puzz_tbm_ai",
+                company: "PUZZ 퍼즐시스템즈",
+                title: "Open Source 모델 학습 및 RAG를 통한 TBM 생성 AI",
+                shortDesc: "매일 반복되는 건설 현장 TBM 문서 작업, 이제 AI가 초안을 똑똑하게 만들어줍니다.",
+                image: "https://placehold.co/600x400/FDBA74/1E293B?text=TBM+AI+생성+문서+예시",
+                duration: "2024.12 - 2025.02 (3개월)",
+                role: "AI 연구, 기술 리드",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견:</strong> 건설 현장 TBM(Tool Box Meeting) 문서 작성 업무의 반복성 및 비효율성.</li>
+                        <li><strong>문제 정의:</strong> 수기 작성으로 인한 시간 소요, 내용 표준화 미흡, 담당자 업무 부담 가중.</li>
+                        <li><strong>목표:</strong> TBM 문서 작성 자동화를 통한 생산성 향상 및 표준화.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '오픈소스 LLM을 특정 도메인(건설 현장 안전) 데이터로 학습시키고 RAG 기술을 적용하면, 상황에 맞는 TBM 문서 초안을 자동으로 생성할 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행 (기술 리드):</strong>
+                            <ul>
+                                <li>타사 협업: 이해관계 조율 및 협업 구체 사항 합의 주도.</li>
+                                <li>팀 리딩: 팀 역할 정의, 업무 조율 및 리딩.</li>
+                                <li>기술 구현: Open Source LLM 선정, RAG 파이프라인 구축, Vector DB 연동 주도적 기획/실행.</li>
+                                <li>프로세스 정립: 타사-자사 간 협업 커뮤니케이션 원칙 수립 및 시행.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>건설 현장 TBM 문서 초안 자동 생성 AI 모델 개발 완료.</li>
+                        <li>타사와의 성공적 협업 모델 구축, 실무 적용 기반 마련.</li>
+                        <li>업무 생산성 향상 및 표준화 가능성 제시.</li>
+                    </ul>`,
+                techStack: ["Open Source LLM", "RAG", "Vector DB", "Python"],
+                detailedImages: [],
+                visuals_needed: ["TBM 문서 예시 (Before/After)", "RAG 파이프라인 아키텍처", "협업 구조도"]
+            },
+            {
+                id: "puzz_multi_agent",
+                company: "PUZZ 퍼즐시스템즈",
+                title: "Multi-Agent를 활용한 앱 개발 방법론 고안 및 아키텍처 설계",
+                shortDesc: "여러 AI 모델과 서비스가 손발을 맞추듯 협력하는 Multi-Agent 시스템, 개발 생산성을 극대화합니다.",
+                image: "https://placehold.co/600x400/818CF8/1E293B?text=Multi-Agent+아키텍처",
+                duration: "2025.01 - 2025.02 (2개월)",
+                role: "AI 연구",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견:</strong> 연구소 내 다수 AI 모델 개발, 외부 서비스 연동 시 복잡성 증대 및 개발 비효율 발생.</li>
+                        <li><strong>문제 정의:</strong> 개별 모델/서비스 연동 방식의 한계, 통합적이고 유연한 시스템 부재.</li>
+                        <li><strong>목표:</strong> AI 모델 외부 서비스 연동 효율화 및 내부 업무 자동화를 위한 새로운 개발 방법론 및 아키텍처 정립.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> 'Multi-Agent 시스템을 도입하여 각 AI 모델과 외부 서비스를 독립적인 에이전트로 구성하고, 이들 간의 상호작용을 통해 복잡한 작업을 자율적으로 수행하도록 하면 개발 생산성과 시스템 확장성을 크게 향상시킬 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>기술 리서치: Multi-Agent 기술 및 관련 아키텍처 심층 연구.</li>
+                                <li>방법론 설계: 신규 앱 개발 방법론 설계 및 연구소 내 적극 제안.</li>
+                                <li>프로토타이핑 및 아키텍처 설계: 설계 방법론 기반 외부 연동 모듈 프로토타이핑, 내부 업무 자동화 아키텍처 설계 주도.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>AI 모델 외부 서비스 연동을 위한 신규 방법론 정립.</li>
+                        <li>내부 업무 자동화 Multi-Agent 아키텍처 설계 완료 → 개발 생산성 향상 기대.</li>
+                    </ul>`,
+                techStack: ["Multi-Agent Systems", "AI", "System Architecture Design"],
+                detailedImages: [],
+                visuals_needed: ["Multi-Agent 아키텍처 다이어그램", "신규 앱 개발 방법론 플로우 차트", "프로토타이핑 모듈 개념도"]
+            },
+
+            // 개인 프로젝트
+            {
+                id: "personal_resume_ai",
+                company: "개인 프로젝트",
+                title: "AI 자기소개서 작성 서비스 제작 (LangChain 활용)",
+                shortDesc: "기업명, 직무명, 이력서 첨부만으로 합격률 높은 자기소개서를 빠르게 완성하는 AI 서비스입니다.",
+                image: "https://placehold.co/600x400/67E8F9/1E293B?text=AI+자소서+서비스+UI",
+                duration: "2024.11 - 2025.02 (4개월)",
+                role: "PO, 1인 개발 (LangChain, Search GPT, ChatGPT 활용)",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견 (사용자 Pain Point):</strong>
+                            <ul>
+                                <li>자기소개서 작성에 과도한 시간 소요.</li>
+                                <li>개인의 주관적 판단으로 기업/직무 적합성 낮은 자소서 작성 경향. (PDF 10쪽 Mission, Goal 참고)</li>
+                            </ul>
+                        </li>
+                        <li><strong>목표:</strong> 사용자 맞춤형, 기업/직무 적합성 높은 자기소개서 초안을 빠르고 효율적으로 생성하는 AI 서비스 개발.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> 'LLM(Search GPT, ChatGPT)과 LangChain을 활용하여 1)기업/직무 정보 자동 분석, 2)사용자 이력서와의 매칭, 3)맞춤형 초안 생성 과정을 자동화하면, 사용자 만족도 높은 자소서 작성 지원이 가능할 것이다.'</li>
+                        <li><strong>검증 및 실행 (1인 개발):</strong>
+                            <ul>
+                                <li>기획 → 디자인(Figma) → 백엔드(Django, Python) → 프론트엔드(React) 전 과정 직접 수행.</li>
+                                <li>LangChain 기반 워크플로우 설계: 기업/직무 정보 수집(Search GPT) → 사용자 경험 정리 → 자소서 문항 기반 초안 생성(ChatGPT). (PDF 11쪽 Workflow 참고)</li>
+                                <li>프롬프트 엔지니어링 및 평가 기준 확립: 각 단계별 산출물 및 최종 자소서 품질 관리 (예: 자소서 평가 4.5점 이상). (PDF 10쪽 Process, 주안점 참고)</li>
+                                <li>사용자 중심 반복 개선: 초기 사용자 그룹 테스트 및 피드백 적극 수렴, 기능/사용성 개선. 인간의 자율적 수정 단계 보장.</li>
+                                <li>최종 검수: '한국어 AI 글 검수기' 적용, 자연스러운 문장 완성. (PDF 15쪽)</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>자기소개서 작성 시간 <strong>500% 단축</strong>. (PDF 11쪽 Achievement)</li>
+                        <li>개인 선입견 배제, 기업 맞춤형 자기소개서 초안 생성. (PDF 11쪽 Achievement)</li>
+                        <li>1인 개발 MVP 성공적 출시, 전주기 제품 개발 경험 확보.</li>
+                        <li>초기 사용자 그룹 '높은 만족도' 피드백 및 팬덤 형성.</li>
+                    </ul>`,
+                techStack: ["LangChain", "Search GPT", "ChatGPT 4.0", "Python", "Django", "React", "Figma", "프롬프트 엔지니어링"],
+                detailedImages: [ ], 
+                visuals_needed: ["LangChain Workflow 다이어그램 (PDF 11쪽)", "GPT 모델 인터페이스 예시 (PDF 10쪽 Search GPT 등)", "최종 산출물(자소서) 예시", "한국어 AI 글 검수기 적용 화면 (PDF 15쪽)"]
+            },
+
+            // 유튜브 채널 'LCK CRACKER' Projects
+            {
+                id: "lck_cracker_faker",
+                company: "유튜브 채널 'LCK CRACKER'",
+                title: "FAKER의 비밀 분석 콘텐츠 기획: '인비저블 썸띵' 증명",
+                shortDesc: "조롱을 감탄으로! 데이터와 심층 분석으로 페이커 선수의 보이지 않는 가치를 증명한 200만 뷰 콘텐츠",
+                image: "image_9382eb.png", 
+                duration: "2023.07 - 2023.08",
+                role: "PM, 콘텐츠 기획",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견 (시장/커뮤니티 상황):</strong>
+                            <ul>
+                                <li>페이커 선수 대상 악성 댓글 만연, 특히 낮은 경기력 지표 기반의 비판 다수.</li>
+                                <li>지표 외 플레이 가치에 대한 '인비저블 썸띵' 조롱 확산. (PDF 4쪽 Mission)</li>
+                            </ul>
+                        </li>
+                        <li><strong>문제 정의:</strong> 팬들에게 페이커 선수의 실제 경기 기여도와 숨겨진 전략적 가치를 제대로 전달하지 못하고 있음.</li>
+                        <li><strong>목표:</strong> 데이터 및 심층 분석 기반 콘텐츠를 통해 '인비저블 썸띵'의 실체를 증명하고, 부정적 여론 반전.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '페이커 선수의 특정 플레이(예: 실수처럼 보이는 움직임) 이면에는 팀 전체에 긍정적 영향을 미치는 전략적 의도가 숨겨져 있을 것이며, 이를 시각적 근거와 함께 설명하면 팬들의 인식을 바꿀 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행 (콘텐츠 기획/제작):</strong>
+                            <ul>
+                                <li>'페이커의 벨풀이 아니었다고?!' 시리즈 기획:
+                                    <ul>
+                                        <li>(사례 분석) 특정 경기 상황(예: 바텀 더블 킬 직후 페이커의 제라스 대상 돌진 플레이) 선정.</li>
+                                        <li>(데이터/영상 분석) 해당 플레이 전후 상황, 미니맵, 팀원 위치, 상대방 움직임 등 종합 분석. (image_9382d0.png ~ image_938273.png 참고)</li>
+                                        <li>(결론 도출) 해당 플레이가 아군 탑 라이너 성장 공간 확보 등 팀 기여 목적이었음을 논증.</li>
+                                    </ul>
+                                </li>
+                                <li>콘텐츠 구성 전략: 타 분야 인기 영상 포맷 분석 및 적용, 대중적 흥미 유발. (PDF 4쪽 Solution, Featured Contents)</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>첫 영상 1개월 내 조회수 100만 돌파, 시리즈 누적 <strong>최대 226만 회</strong> 기록. (PDF 4, 5쪽)</li>
+                        <li>댓글 반응 극적 변화: 조롱 → '인비저블 썸띵'에 대한 감탄 및 선수 리스펙 증가. (PDF 4, 5쪽)</li>
+                        <li>성공 모델 확립: 타 선수 분석 콘텐츠로 확장, 선수 전반 이미지 개선 및 100만+ 영상 추가 제작. (PDF 5쪽)</li>
+                        <li>채널 영향력 강화: LCK 공식 채널에서도 상위권 수준의 높은 조회수 기록. (PDF 5쪽)</li>
+                    </ul>`,
+                techStack: ["데이터 분석", "콘텐츠 기획", "영상 편집 (Adobe Premiere)", "커뮤니티 반응 분석", "스토리텔링"],
+                detailedImages: [
+                    "image_9382d0.png", "image_9382cb.png", "image_9382b1.png", 
+                    "image_9382ae.png", "image_938296.png", "image_938293.png", 
+                    "image_93828f.png", "image_938276.png", "image_938273.png"
+                ],
+                visuals_needed: ["200만 뷰 영상 썸네일 (PDF 4쪽)", "Featured Contents 예시 이미지 (PDF 4쪽)", "댓글 반응 캡처 (PDF 4쪽)", "Contents Lineup 썸네일 (PDF 5쪽)", "조회수 성과 이미지 (PDF 5쪽)"]
+            },
+            {
+                id: "lck_cracker_longform",
+                company: "유튜브 채널 'LCK CRACKER'",
+                title: "조회 수 40만 롱폼 영상 제작을 통한 구독자 유지 및 신규 팬 유입",
+                shortDesc: "스토리텔링형 콘텐츠로 핵심 팬층을 사로잡고 신규 팬을 유입시키다.",
+                image: "https://placehold.co/600x400/DDD6FE/1E293B?text=LCK+CRACKER+롱폼+썸네일",
+                duration: "2023.01 - 2023.12",
+                role: "PM",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 상황:</strong> 핵심 콘텐츠 출연자 하차 → 채널 주력 콘텐츠 공백 발생, 구독자 이탈 위기.</li>
+                        <li><strong>문제 정의:</strong> 기존 구독자층(특정 팀 팬) 유지와 동시에 신규 팬 유입을 위한 새로운 콘텐츠 방향성 모색 필요.</li>
+                        <li><strong>목표:</strong> 매력적인 롱폼 콘텐츠 개발을 통한 채널 활성화 및 구독자 기반 확대.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> 'e스포츠 주요 이벤트 시점 및 신규 팬층의 관심사를 고려한 스토리텔링형 롱폼 콘텐츠는 기존 구독자 만족도 제고 및 신규 팬 유입에 효과적일 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>데이터 분석: e스포츠 신규 팬층 유입 시점 및 관심사 파악.</li>
+                                <li>콘텐츠 기획/제작: 분석 기반 스토리텔링형 콘텐츠 제작.</li>
+                                <li>확장 전략: 초기 팬 반응 분석 후, 신규 팬 유입 가능 주제로 콘텐츠 확장.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>주요 롱폼 영상 37만 조회수 달성.</li>
+                        <li>채널 콘텐츠 다양성 확보 및 구독자 유지/증가 기여.</li>
+                    </ul>`,
+                techStack: ["데이터 분석", "콘텐츠 기획", "스토리텔링", "Adobe Premiere"],
+                detailedImages: [],
+                visuals_needed: ["롱폼 영상 썸네일/임베드", "팬 반응 캡처", "콘텐츠 기획안 일부"]
+            },
+            {
+                id: "lck_cracker_gold_rate",
+                company: "유튜브 채널 'LCK CRACKER'",
+                title: "종목 내 신규 데이터 지표 '골드 수급률' 개발 및 공식 채널 반영 기여",
+                shortDesc: "팬들의 경기 이해도를 높인 신규 지표 '골드 수급률', 공식 채널까지 진출!",
+                image: "https://placehold.co/600x400/A7F3D0/1E293B?text=골드+수급률+지표+설명",
+                duration: "2023.01 - 2023.12",
+                role: "PM",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 인식:</strong> 기존 경기 지표의 한계, 팬들의 경기력에 대한 심층적 이해 부족.</li>
+                        <li><strong>목표:</strong> 경기력과 직결되는 새로운 데이터 지표 개발을 통해 팬들의 경기 이해도 증진.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '팀의 골드 획득 효율성을 나타내는 '골드 수급률' 지표를 개발하고, 이를 분석한 콘텐츠를 제공하면 팬들의 경기 관람 재미와 이해도를 높일 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>지표 개발: '골드 수급률' 신규 지표 직접 고안 및 정의.</li>
+                                <li>콘텐츠 제작: 10개 팀 데이터 분석 영상 제작 및 배포.</li>
+                                <li>커뮤니티 소통: 팬들과 적극 소통하며 지표 검증 및 가치 전파.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>팬들의 긍정적 평가 및 높은 관심 확보.</li>
+                        <li>개발 지표, 차기 시즌 <strong>LCK 공식 채널 데이터로 추가</strong>되는 이례적 성과 달성.</li>
+                    </ul>`,
+                techStack: ["데이터 분석", "지표 개발", "콘텐츠 제작", "커뮤니티 소통"],
+                detailedImages: [],
+                visuals_needed: ["'골드 수급률' 지표 설명 이미지/도식", "데이터 분석 영상 캡처/링크", "팬들의 긍정적 평가 인용구"]
+            },
+
+            // 주식회사그로잉랩 Projects
+            {
+                id: "growinglab_butler_launch",
+                company: "주식회사그로잉랩",
+                title: "주식 분석 서비스 'Butler' - 홍보비 0원으로 초기 유저 20,000명 확보 전략",
+                shortDesc: "기업 분석 콘텐츠의 가치를 통해 팬덤을 형성하고, 마케팅 비용 없이 성공적인 초기 시장 진입을 이끌었습니다.",
+                image: "image_9391d1.jpg", 
+                duration: "2021.05 - 2022.01 (이력서 기준) / 2021.03 - 2021.11 (PDF 6쪽 기준)",
+                role: "서비스 기획, 초기 유저 확보 전략 기획 및 실행",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 상황:</strong> 신규 주식 분석 서비스 'Butler' 런칭 시점, 효과적인 초기 유저 확보 방안 부재. (이력서)</li>
+                        <li><strong>문제 정의:</strong> 제한된 마케팅 예산 내에서 서비스 인지도를 높이고, 실제 사용자를 유치하여 PMF 검증 필요.</li>
+                        <li><strong>목표:</strong> '기업 분석을 가장 쉽게 할 수 있는 서비스'라는 가치를 전달하여, 홍보 비용 없이 초기 사용자 20,000명 확보. (PDF 6쪽 Mission)</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '양질의 기업 분석 콘텐츠를 제공하고, 특정 타겟(강의 수강생, 전문 블로거) 대상 알파 테스트를 통해 초기 팬덤을 형성하면, 이들의 자발적 구전 효과로 마케팅 비용 없이 초기 사용자 확보가 가능할 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>기업 분석 강의 기획 및 런칭 → 잠재 고객풀 확보.</li>
+                                <li>강의 수강생 및 '마스터 구독자'(블로거 등) 대상 알파 테스트 진행 (PC 웹 최적화). (PDF 6쪽 '알파 오픈' 공지)</li>
+                                <li>참여자들의 Butler 서비스 활용 콘텐츠(기업 분석글 등) 자발적 생성 및 온라인 커뮤니티(가치투자연구소 등)/블로그 공유 유도. (PDF 6쪽 사용자 후기 이미지들)</li>
+                            </ul>
+                        </li>
+                        <li><strong>전략 핵심:</strong> '팬덤 기반' 구전 마케팅 및 콘텐츠 확산 전략 전반 직접 기획 및 프로젝트 관리 주도.</li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>홍보 비용 없이 출시 1개월 만에 초기 사용자 <strong>20,000명 확보</strong> 성공.</li>
+                        <li>기업 분석 콘텐츠 가치 제공 → 강력한 팬덤 형성 및 자발적 홍보 선순환 구조 구축. (PDF 6쪽 '정식 오픈 전, 홍보하는 팬덤 형성')</li>
+                        <li>PMF(Product-Market Fit) 효과적 검증, 서비스 시장 성공적 안착 기여.</li>
+                    </ul>`,
+                techStack: ["서비스 기획", "콘텐츠 마케팅", "커뮤니티 운영", "알파/베타 테스트", "그로스 해킹"],
+                detailedImages: [ 
+                    "image_9391b3.png", 
+                    "image_93919a.png", 
+                    "image_939195.png", 
+                    "image_93917b.png", 
+                    "image_939177.png", 
+                    "image_939173.png", 
+                    "image_93915a.png"
+                ],
+                visuals_needed: ["Butler 서비스 대시보드 UI (image_9391d1.jpg)", "사용자 생성 콘텐츠 예시 (블로그, 커뮤니티 게시글 등 - image_9391b3.png 등 다수)", "알파 오픈 공지 (PDF 6쪽 상단 내용)", "초기 유저 확보 성과 그래프 (가상)"]
+            },
+            {
+                id: "growinglab_butler_engagement",
+                company: "주식회사그로잉랩",
+                title: "데이터 기반 메인 페이지 개선, '버틀러' 유저 참여도 80% 증가",
+                shortDesc: "데이터 분석으로 문제점을 진단하고 UI 개선을 통해 유저 참여도를 극적으로 향상시켰습니다.",
+                image: "https://placehold.co/600x400/BAE6FD/1E293B?text=버틀러+메인+개선+전후",
+                duration: "2021.03 - 2022.04",
+                role: "서비스 기획",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견:</strong> 서비스 초기, 사용자 행동 데이터 분석 결과 '방문당 기업 검색 횟수' 등 주요 참여 지표 저조.</li>
+                        <li><strong>문제 정의:</strong> 사용자가 서비스의 핵심 가치를 빠르게 인지하고 활용하도록 유도하는 장치 부족.</li>
+                        <li><strong>목표:</strong> 메인 페이지 개선을 통해 유저 참여도 지표 80% 증가.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '사용자가 필요로 하는 핵심 정보를 메인 페이지에 전면 배치하면, 서비스 탐색 시간을 줄이고 핵심 기능 사용률을 높여 참여도를 개선할 수 있을 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>사용자 행동 데이터 심층 분석 → 문제점 및 개선 포인트 진단.</li>
+                                <li>개선안(필요 정보 메인 페이지 추가 등) 직접 기획.</li>
+                                <li>개발팀/디자인팀과 긴밀 협업하여 신속하게 개선안 실행.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>주요 유저 참여도 지표 <strong>80% 증가</strong> 달성.</li>
+                        <li>데이터 기반의 작은 UI 변화가 사용자 행동에 큰 영향을 미칠 수 있음을 실증.</li>
+                    </ul>`,
+                techStack: ["데이터 분석", "서비스 기획", "UI/UX 개선", "협업"],
+                detailedImages: [],
+                visuals_needed: ["개선 전/후 UI 비교 스크린샷", "유저 참여도 80% 증가 그래프", "사용자 행동 데이터 분석 과정 요약"]
+            },
+            {
+                id: "growinglab_new_feature",
+                company: "주식회사그로잉랩",
+                title: "시장 분석 통한 신규 기능 출시, 유저 참여도 117% 및 평균 참여시간 67% 증가",
+                shortDesc: "국내 최초 부문별 실적 시각화 기능 출시로 서비스 차별화 및 유저 충성도 강화",
+                image: "https://placehold.co/600x400/C4B5FD/1E293B?text=실적+시각화+기능+UI",
+                duration: "2022.08 - 2022.10",
+                role: "서비스 기획",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 인식:</strong> 기존 기능만으로는 서비스 차별화 및 사용자 충성도 강화에 한계.</li>
+                        <li><strong>문제 정의:</strong> 사용자의 서비스 체류 시간 및 깊이 있는 상호작용 유도할 신규 기능 부재.</li>
+                        <li><strong>목표:</strong> 시장 분석 기반 신규 기능 출시를 통해 유저 참여도 및 평균 참여 시간 증대.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '기업의 부문별 실적을 시각화하여 제공하는 기능은 사용자의 기업 분석 깊이를 더하고, 서비스 만족도 및 체류 시간을 증가시킬 것이다.'</li>
+                        <li><strong>검증 및 실행:</strong>
+                            <ul>
+                                <li>유저 리서치 및 시장 조사 주도적 수행 → 사업 부문별/지역별 실적 시각화 니즈 발굴.</li>
+                                <li>국내 최초 '부문별 실적 시각화' 서비스 기획 및 출시 과정 프로젝트 관리.</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>유저 참여도 지표 <strong>117% 증가</strong>.</li>
+                        <li>활성 유저당 평균 참여 시간 <strong>67% 증가</strong>.</li>
+                        <li>서비스 차별화 및 사용자 충성도 강화 기여.</li>
+                    </ul>`,
+                techStack: ["시장 조사", "유저 리서치", "서비스 기획", "프로젝트 관리"],
+                detailedImages: [],
+                visuals_needed: ["신규 기능 UI 스크린샷", "유저 참여도/시간 증가 그래프", "시장 조사/유저 리서치 과정 요약"]
+            },
+             {
+                id: "growinglab_butler_planning",
+                company: "주식회사그로잉랩",
+                title: "분석 서비스 '버틀러(butler.works)' 초기 서비스 기획",
+                shortDesc: "기업 분석을 가장 쉽게 만드는 서비스의 청사진을 그리다.",
+                image: "https://placehold.co/600x400/F87171/1E293B?text=버틀러+초기+기획+자료",
+                duration: "2022.02 - 2022.12 (이력서 기준)",
+                role: "서비스 기획 (핵심 멤버)",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 인식:</strong> 개인 투자자들의 기업 분석 과정의 복잡성과 정보 접근의 어려움.</li>
+                        <li><strong>목표:</strong> 사용자가 쉽고 직관적으로 기업 분석을 수행할 수 있도록 돕는 새로운 서비스 컨셉 및 상세 기능 정의.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>초기 참여:</strong> 법인 설립 전 첫 팀원으로 합류, 서비스 핵심 가치 및 타겟 고객 정의 단계부터 참여.</li>
+                        <li><strong>주요 역할:</strong>
+                            <ul>
+                                <li>시장 조사: 유사/해외 서비스 분석, 타겟 고객 심층 분석.</li>
+                                <li>제품 설계: 와이어프레임 작성, 상세 기획, 프로덕트 디자인 과정 핵심 참여.</li>
+                            </ul>
+                        </li>
+                        <li><strong>의사결정 참여:</strong> 주요 의사결정 적극 참여, 서비스 초기 성장 방향성 설정에 기여.</li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>시장 및 사용자 분석 기반 'Butler' 서비스 핵심 컨셉 및 주요 기능 성공적 정의.</li>
+                        <li>초기 서비스 기획 핵심 역할 수행, 제품 개발의 견고한 기반 마련.</li>
+                    </ul>`,
+                techStack: ["시장 조사", "사용자 분석", "와이어프레임", "상세 기획", "프로덕트 디자인"],
+                detailedImages: [],
+                visuals_needed: ["초기 와이어프레임 스케치", "시장 분석 자료 일부", "서비스 컨셉 정의 자료"]
+            },
+
+            // 육군 창업경진대회
+            {
+                id: "army_startup_contest",
+                company: "육군 창업경진대회",
+                title: "생고기 배달서비스 '래고_Let's 고기' 아이디어, '한국경제신문사장상' 수상",
+                shortDesc: "배달 시장의 니즈를 파악한 혁신적인 아이디어로 창업경진대회에서 수상했습니다.",
+                image: "https://placehold.co/600x400/FECACA/1E293B?text=레고+서비스+컨셉", 
+                duration: "2019.05 - 2019.07",
+                role: "아이디어 기획",
+                challenge: `
+                    <ul>
+                        <li><strong>문제 발견 (시장 관찰):</strong> 코로나19로 배달 음식 보편화, 그러나 구워 먹는 고기는 외식과 배달 간 현저한 품질 차이 존재. (PDF 7쪽 Mission)</li>
+                        <li><strong>문제 정의:</strong> 소비자들이 배달 고기에서 음식점 수준의 만족스러운 경험을 하지 못하고 있음.</li>
+                        <li><strong>목표:</strong> 배달로도 음식점과 동일한 만족도의 고기 경험을 제공하는 새로운 서비스 모델 개발.</li>
+                    </ul>`,
+                solution: `
+                    <ul>
+                        <li><strong>가설 수립:</strong> '소비자들은 집에서도 고깃집과 유사한 품질의 생고기 구이를 즐기고 싶어하며, 편리함과 즐거움을 동시에 제공하는 큐레이션 기반 배달 서비스에 대한 니즈가 있을 것이다.'</li>
+                        <li><strong>핵심 아이디어 및 실행 계획:</strong>
+                            <ul>
+                                <li>서비스 컨셉: 생고기 + 고깃집 스타일 차림상 함께 배달.</li>
+                                <li>핵심 가치: '편리하고 즐거운 고기 배달'. (PDF 7쪽 Core Value)</li>
+                                <li>주요 기능/경험: 간편 주문, 상황/취향 맞춤 고기 큐레이션, 경험 중심의 즐거운 식사 환경 제공. (PDF 7쪽 Solution)</li>
+                                <li>초기 전략: 마장동 주변 5개구 초기 타겟, 다양한 고객군(1인 가구, 대학생 등) 분석 및 맞춤형 마케팅 전략 구상. (PDF 7쪽 Customer, 마케팅 전략)</li>
+                            </ul>
+                        </li>
+                    </ul>`,
+                impact: `
+                    <ul>
+                        <li>육군 창업경진대회 <strong>'한국경제신문사장상' 수상</strong>.</li>
+                        <li>아이디어의 혁신성 및 사업성 공식 인정 (실제 사업 실행은 군인 신분으로 제한).</li>
+                    </ul>`,
+                techStack: ["아이디어 기획", "사업 계획", "시장 분석", "고객 분석", "경험 디자인"],
+                detailedImages: [ ],
+                visuals_needed: ["서비스 컨셉 이미지/목업 (PDF 7쪽 '래고 개요')", "핵심 가치/솔루션 다이어그램 (PDF 7쪽)", "타겟 고객 분석 이미지 (PDF 7쪽)", "상장 이미지"]
+            }
+        ];
+
+        const projectGroupsContainer = document.getElementById('project-groups-container');
+        const projectModalElement = document.getElementById('projectModal');
+        const imageModalElement = document.getElementById('imageModal');
+        const modalBody = document.getElementById('modal-body');
+        const modalImage = document.getElementById('modalImage');
+
+
+        function openProjectModal(projectId) {
+            const project = projectsData.find(p => p.id === projectId);
+            if (project) {
+                let techList = project.techStack.map(tag => `<span class="skill-tag">${tag}</span>`).join('');
+                
+                let detailedImagesHtml = '';
+                if (project.detailedImages && project.detailedImages.length > 0) {
+                    detailedImagesHtml = '<div class="project-detail-image-grid">';
+                    project.detailedImages.forEach(imgPath => {
+                        detailedImagesHtml += `<div><img src="${imgPath}" alt="${project.title} 상세 이미지" onclick="openImageModal('${imgPath}')"></div>`;
+                    });
+                    detailedImagesHtml += '</div>';
+                } else {
+                    let visualsList = project.visuals_needed.map(item => `<li class="text-sm text-slate-500">${item}</li>`).join('');
+                    if (visualsList) {
+                         detailedImagesHtml = `
+                            <h3 class="text-lg font-semibold mt-6 mb-2 text-slate-600">관련 시각 자료 (예시)</h3>
+                            <ul class="list-disc list-inside ml-4 mb-4 space-y-1">${visualsList}</ul>
+                        `;
+                    }
+                }
+
+                modalBody.innerHTML = `
+                    <h2 class="text-3xl font-bold mb-4 text-blue-600">${project.title}</h2>
+                    <p class="text-sm text-slate-500 mb-1">${project.duration}</p>
+                    <p class="text-md font-semibold text-slate-700 mb-4">${project.role} ${project.company && project.company !== "개인 프로젝트" && project.company !== "육군 창업경진대회" ? `(${project.company})` : ''}</p>
+                    <img src="${project.image}" alt="${project.title} 대표 이미지" class="w-full h-auto max-h-96 object-contain rounded-lg mb-6 shadow-md">
+                    
+                    <h3 class="subsection-title text-slate-800">도전 과제 (Problem Definition & Goal)</h3>
+                    <div class="subsection-content text-slate-700 mb-4 leading-relaxed">${project.challenge}</div>
+                    
+                    <h3 class="subsection-title text-slate-800">가설 수립 및 해결 과정 (Hypothesis & Solution Process)</h3>
+                    <div class="subsection-content text-slate-700 mb-4 leading-relaxed">${project.solution}</div>
+                    ${detailedImagesHtml}
+                    
+                    <h3 class="subsection-title text-slate-800">핵심 성과 및 결과 (Key Achievements & Impact)</h3>
+                    <div class="subsection-content mb-4 space-y-1">${project.impact}</div>
+                    
+                    <h3 class="subsection-title text-slate-800">사용 기술 (Tech Stack)</h3>
+                    <div class="mb-4">${techList}</div>
+                `;
+                projectModalElement.style.display = "block";
+            }
+        }
+        
+        function openImageModal(src) {
+            imageModalElement.style.display = "block";
+            modalImage.src = src;
+        }
+
+        function closeProjectModal() {
+            projectModalElement.style.display = "none";
+        }
+
+        function closeImageModal() {
+            imageModalElement.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == projectModalElement) {
+                closeProjectModal();
+            }
+            if (event.target == imageModalElement) {
+                closeImageModal();
+            }
+        }
+
+        // Populate project cards by company
+        const companies = [...new Set(projectsData.map(p => p.company))];
+        const companyOrder = ["PUZZ 퍼즐시스템즈", "개인 프로젝트", "유튜브 채널 'LCK CRACKER'", "주식회사그로잉랩", "육군 창업경진대회"];
+        
+        companies.sort((a, b) => {
+            let indexA = companyOrder.indexOf(a);
+            let indexB = companyOrder.indexOf(b);
+            if (indexA === -1) indexA = companyOrder.length;
+            if (indexB === -1) indexB = companyOrder.length;
+            return indexA - indexB;
+        });
+
+        companies.forEach(company => {
+            const companySection = document.createElement('div');
+            companySection.innerHTML = `<h3 class="company-section-title">${company}</h3>`;
+            
+            const projectsGrid = document.createElement('div');
+            projectsGrid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-8';
+
+            projectsData.filter(p => p.company === company).forEach(project => {
+                const card = `
+                    <div class="card p-6 cursor-pointer flex flex-col justify-between" onclick="openProjectModal('${project.id}')">
+                        <div>
+                            <img src="${project.image}" alt="${project.title} 썸네일" class="w-full h-48 object-cover rounded-md mb-4">
+                            <h4 class="text-xl font-semibold mb-2 text-blue-600">${project.title}</h4>
+                            <p class="text-slate-600 text-sm mb-3 h-16 overflow-hidden">${project.shortDesc}</p>
+                        </div>
+                        <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 mt-4">상세 보기</button>
+                    </div>
+                `;
+                projectsGrid.innerHTML += card;
+            });
+            companySection.appendChild(projectsGrid);
+            projectGroupsContainer.appendChild(companySection);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
