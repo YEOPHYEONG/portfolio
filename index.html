@@ -6,6 +6,8 @@
     <title>김동엽 | AI 기반 문제 해결 전문가</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', 'Noto Sans KR', sans-serif;
@@ -34,13 +36,39 @@
             border-radius: 0.75rem; /* 12px */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden; 
         }
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+        .card-pictogram-image { 
+            width: 100%;
+            height: 12rem; 
+            object-fit: contain; 
+            padding: 1.5rem; 
+            background-color: #f3f4f6; 
+            border-bottom: 1px solid #e5e7eb; 
+        }
+        .project-hashtags-container {
+            margin-top: 0.75rem; 
+            margin-bottom: 0.75rem; 
+            padding-left: 1.5rem; 
+            padding-right: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem; 
+        }
+        .project-hashtag {
+            background-color: #e5e7eb; 
+            color: #4b5563; 
+            padding: 0.25rem 0.625rem; 
+            border-radius: 0.25rem; 
+            font-size: 0.75rem; 
+            font-weight: 500;
+        }
         .modal {
-            display: none; /* Hidden by default */
+            display: none; 
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -53,18 +81,18 @@
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
-            padding: 2.5rem; /* 40px */
+            padding: 2.5rem; 
             border: 1px solid #888;
             width: 80%;
             max-width: 900px;
-            border-radius: 0.75rem; /* 12px */
+            border-radius: 0.75rem; 
             position: relative;
         }
         .modal-content ul {
-            padding-left: 1.5rem; /* list-disc 와 함께 사용시 적절한 여백 */
+            padding-left: 1.5rem; 
         }
         .modal-content li {
-            margin-bottom: 0.5rem; /* 각 항목 간 간격 */
+            margin-bottom: 0.5rem; 
         }
         .close-button {
             color: #aaa;
@@ -82,42 +110,41 @@
             cursor: pointer;
         }
         .skill-tag {
-            background-color: #e0f2fe; /* light blue */
-            color: #0c4a6e; /* dark blue */
+            background-color: #e0f2fe; 
+            color: #0c4a6e; 
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.875rem;
             margin: 0.25rem;
             display: inline-block;
         }
-        /* Timeline */
         .timeline-item {
             position: relative;
             padding-bottom: 2rem;
-            padding-left: 2.5rem; /* Space for the line and dot */
+            padding-left: 2.5rem; 
         }
         .timeline-item:last-child {
             padding-bottom: 0;
         }
-        .timeline-item::before { /* Vertical line */
+        .timeline-item::before { 
             content: '';
             position: absolute;
             left: 0.5rem;
             top: 0.25rem;
             bottom: 0;
             width: 2px;
-            background-color: #cbd5e1; /* gray-300 */
+            background-color: #cbd5e1; 
         }
         .timeline-item:last-child::before {
-             height: calc(100% - 2rem); /* Adjust for last item */
+             height: calc(100% - 2rem); 
         }
         .timeline-dot {
             position: absolute;
-            left: calc(0.5rem - 0.375rem + 1px); /* Center the dot on the line */
+            left: calc(0.5rem - 0.375rem + 1px); 
             top: 0.25rem;
-            width: 0.75rem; /* 12px */
-            height: 0.75rem; /* 12px */
-            background-color: #3b82f6; /* blue-500 */
+            width: 0.75rem; 
+            height: 0.75rem; 
+            background-color: #3b82f6; 
             border-radius: 50%;
             border: 2px solid white;
         }
@@ -125,12 +152,12 @@
             transition: color 0.3s ease;
         }
         .nav-item:hover {
-            color: #3b82f6; /* blue-500 */
+            color: #3b82f6; 
         }
         .project-detail-image-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjusted minmax for smaller images */
-            gap: 0.75rem; /* Adjusted gap */
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 0.75rem; 
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
@@ -139,13 +166,12 @@
             height: auto;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer; /* Indicate images are clickable */
+            cursor: pointer; 
         }
-        /* Simple Image Modal Styles */
         .image-modal {
             display: none;
             position: fixed;
-            z-index: 1001; /* Higher than project modal */
+            z-index: 1001; 
             padding-top: 50px;
             left: 0;
             top: 0;
@@ -168,7 +194,7 @@
             from {transform:scale(0)}
             to {transform:scale(1)}
         }
-        .image-modal .close-button { /* Re-style close button for image modal */
+        .image-modal .close-button { 
             position: absolute;
             top: 15px;
             right: 35px;
@@ -177,49 +203,96 @@
             font-weight: bold;
             transition: 0.3s;
         }
-        /* 개조식 표현을 위한 스타일 */
         .modal-content .subsection-title {
-            font-size: 1.25rem; /* 20px */
+            font-size: 1.25rem; 
             font-weight: 600;
-            color: #1e3a8a; /* blue-800 */
+            color: #1e3a8a; 
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
         }
         .modal-content .subsection-content ul {
             list-style-type: disc;
-            padding-left: 1.25rem; /* 20px */
+            padding-left: 1.25rem; 
         }
         .modal-content .subsection-content p,
         .modal-content .subsection-content li {
             line-height: 1.6;
-            margin-bottom: 0.5rem; /* 8px */
+            margin-bottom: 0.5rem; 
         }
-         .modal-content .subsection-content ul ul { /* Nested lists */
+         .modal-content .subsection-content ul ul { 
             list-style-type: circle;
-            padding-left: 1.25rem; /* 20px */
+            padding-left: 1.25rem; 
             margin-top: 0.25rem;
         }
-        .achievement-highlight-card { /* 변경된 스타일 클래스명 */
-            background-color: #f9fafb; /* gray-50 */
-            border: 1px solid #e5e7eb; /* gray-200 */
-            padding: 1.25rem; /* p-5 */
-            border-radius: 0.5rem; /* rounded-lg */
+        .achievement-highlight-card { 
+            background-color: #f9fafb; 
+            border: 1px solid #e5e7eb; 
+            padding: 1.25rem; 
+            border-radius: 0.5rem; 
             display: flex;
             align-items: center;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .achievement-highlight-card:hover {
-            background-color: #f3f4f6; /* gray-100 */
+            background-color: #f3f4f6; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.07);
         }
         .achievement-highlight-card svg {
-            width: 2rem; /* w-8 */
-            height: 2rem; /* h-8 */
-            margin-right: 1rem; /* mr-4 */
-            color: #2563eb; /* blue-600 */
-            flex-shrink: 0; /* 아이콘 크기 고정 */
+            width: 2rem; 
+            height: 2rem; 
+            margin-right: 1rem; 
+            color: #2563eb; 
+            flex-shrink: 0; 
         }
         .achievement-highlight-card p {
-            margin-bottom: 0; /* 기본 p 태그 마진 제거 */
+            margin-bottom: 0; 
+        }
+        .core-competency-card {
+            background-color: #ffffff; /* white */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); /* shadow-sm */
+            transition: box-shadow 0.3s ease;
+        }
+        .core-competency-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+        }
+        .core-competency-card h3 {
+            font-size: 1.125rem; /* text-lg (기존 xl이 너무 커서 조정) */
+            font-weight: 600; /* font-semibold */
+            color: #1d4ed8; /* text-blue-700 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .core-competency-card i {
+            margin-right: 0.5rem; /* mr-2 */
+            color: #2563eb; /* blue-600 아이콘 색상 통일 */
+        }
+        .core-competency-card p {
+            color: #4b5563; /* text-gray-600 (기존 gray-700보다 약간 밝게) */
+            font-size: 0.9rem; /* 약간 작게 */
+            line-height: 1.6;
+        }
+
+        .gemini-feature-button {
+            background-color: #6366f1; 
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .gemini-feature-button:hover {
+            background-color: #4f46e5; 
+        }
+        .gemini-output {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #e0f2fe; 
+            border-radius: 0.375rem;
+            border: 1px solid #bae6fd; 
+            font-size: 0.9rem;
+            white-space: pre-wrap; 
         }
 
     </style>
@@ -258,7 +331,7 @@
         <div class="container mx-auto px-6">
             <h2 class="section-title text-slate-800">소개 (About Me)</h2>
             <div class="flex flex-col md:flex-row gap-10 items-start">
-                <div class="w-full md:w-1/3 flex flex-col items-center md:items-start md:sticky md:top-24"> {/* 사진과 학력/자격증을 왼쪽에 고정 */}
+                <div class="w-full md:w-1/3 flex flex-col items-center md:items-start md:sticky md:top-24"> 
                     <img src="https://placehold.co/300x300/E2E8F0/334155?text=김동엽님+프로필+사진" alt="김동엽 프로필 사진" class="rounded-full shadow-lg w-60 h-60 md:w-64 md:h-64 object-cover mb-6">
                     <div class="w-full text-center md:text-left">
                         <h3 class="text-xl font-semibold mb-2 text-slate-800">학력</h3>
@@ -276,22 +349,28 @@
                         안녕하세요, 김동엽입니다. 저는 사용자의 '왜?'라는 질문에서 출발해 데이터로 본질을 파악하고, AI 기술을 활용하여 실제적인 해결책을 만들어내는 것에 집중합니다. 도전을 통해 인간을 이해하고, 고객 중심의 가치를 창출하는 것을 최우선으로 생각하며, 어제보다 발전하는 오늘을 만들기 위해 노력합니다.
                     </p>
                     
-                    <h3 class="text-2xl font-semibold mb-4 text-slate-800 border-b pb-2">핵심 역량</h3>
-                    <div class="space-y-5 mb-10">
-                        <div>
-                            <h4 class="text-xl font-semibold text-blue-700 mb-1">1. 고객 가치를 발견하는 힘 (기획/전략)</h4>
-                            <ul class="list-disc list-inside ml-4 text-slate-600 space-y-1 text-base">
-                                <li><span class="font-medium">사용자 중심 설계:</span> 고객 니즈/Pain Point의 근본 원인(Why) 탐구 기반 가치 설계. 사용자 인터뷰 ~ 프로토타입 검증 전 과정 주도.</li>
-                                <li><span class="font-medium">데이터 기반 의사결정:</span> 핵심 문제 정의 → 가설 수립 → 검증 → 실행 사이클 주도. 데이터 기반 의사결정으로 서비스 개선 및 성장 견인.</li>
-                                <li><span class="font-medium">AI 프로덕트 기획/전략 실행:</span> AI 기술(LLM, RAG) 기반 사용자 가치 중심 AI 서비스 기획. 시장 분석 및 경쟁 우위 전략 포함, 구체적 로드맵 수립 및 성공적 실행.</li>
-                            </ul>
+                    <!-- 핵심 역량 섹션 업데이트 -->
+                    <h3 class="text-2xl font-semibold mb-6 text-slate-800 border-b pb-2">핵심 역량</h3>
+                    <div class="grid md:grid-cols-2 gap-6 mb-10">
+                        <div class="core-competency-card">
+                            <h3><i class="fas fa-users"></i>사용자 중심 프로덕트 설계/검증</h3>
+                            <p>고객 니즈와 Pain Point의 근본 원인(Why) 탐구 기반 가치 설계, 사용자 인터뷰부터 프로토타입 검증까지 전 과정 주도하여 사용자 만족 극대화</p>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-blue-700 mb-1">2. 아이디어를 현실로 만드는 힘 (실행/개발)</h4>
-                            <ul class="list-disc list-inside ml-4 text-slate-600 space-y-1 text-base">
-                                <li><span class="font-medium">AI 솔루션 개발 및 기술 리더십:</span> AI 모델/서비스 프로토타이핑(React, Django, Python) 직접 수행. 엔지니어링팀 기술 협업 및 개발 방향 제시.</li>
-                                <li><span class="font-medium">엔드투엔드 프로젝트 관리/실행:</span> 목표 설정 → MVP 개발 → 출시 → 그로스 해킹 → 성과 측정 → 회고까지 전 과정 리딩 및 성공적 목표 달성.</li>
-                            </ul>
+                        <div class="core-competency-card">
+                            <h3><i class="fas fa-brain"></i>AI 프로덕트 기획/전략 실행</h3>
+                            <p>AI 기술(LLM, RAG) 기반 사용자 가치 중심 AI 서비스 기획, 시장 분석 및 경쟁 우위 전략 포함 구체적 로드맵 수립 및 성공적 실행</p>
+                        </div>
+                        <div class="core-competency-card">
+                            <h3><i class="fas fa-chart-line"></i>데이터 기반 의사결정</h3>
+                            <p>핵심 문제 정의부터 가설-검증-실행 사이클 주도, 데이터 기반 의사결정으로 서비스 개선 및 성장 견인</p>
+                        </div>
+                        <div class="core-competency-card">
+                            <h3><i class="fas fa-laptop-code"></i>AI 솔루션 개발 및 기술 리더십</h3>
+                            <p>AI 모델/서비스 프로토타이핑(React, Django, Python) 직접 수행, 엔지니어링팀 기술 협업 및 개발 방향 제시</p>
+                        </div>
+                        <div class="core-competency-card md:col-span-2"> {/* 마지막 항목은 2칸 차지 */}
+                            <h3><i class="fas fa-tasks"></i>엔드투엔드 프로젝트 관리/실행</h3>
+                            <p>목표 설정부터 MVP 개발, 출시, 그로스 해킹, 성과 측정, 회고까지 전 과정 리딩 및 성공적 목표 달성</p>
                         </div>
                     </div>
 
@@ -485,7 +564,9 @@
                 company: "PUZZ 퍼즐시스템즈",
                 title: "내부 문서 기반 AI 인사이트/리포트 생성 서비스 프로토타입",
                 shortDesc: "사내 방대한 문서를 똑똑하게 분석하여, 필요한 인사이트만 빠르게 찾아주는 AI 비서",
-                image: "https://placehold.co/600x400/A5B4FC/1E293B?text=AI+인사이트+리포터+UI",
+                image: "https://placehold.co/600x400/A5B4FC/3B82F6?text=AI+리포터+아이콘&font=noto-sans-kr", 
+                pictogramImage: "https://placehold.co/300x200/A5B4FC/1E293B?text=AI+리포터&font=noto-sans-kr", 
+                hashtags: ["#업무자동화", "#RAG", "#LLM", "#프로토타이핑", "#1인개발"],
                 duration: "2025.04 - 2025.05 (1개월)",
                 role: "AI 연구, 1인 개발",
                 challenge: `
@@ -522,7 +603,9 @@
                 company: "PUZZ 퍼즐시스템즈",
                 title: "LLM의 BDI 분석을 통한 Voice Phishing 100% 탐지 모델",
                 shortDesc: "지능화되는 보이스피싱, AI가 발화 의도까지 파악하여 100% 막아냅니다.",
-                image: "https://placehold.co/600x400/FCA5A5/1E293B?text=보이스피싱+탐지+모델+개념도",
+                image: "https://placehold.co/600x400/FCA5A5/3B82F6?text=보이스피싱+탐지+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/FCA5A5/1E293B?text=보이스피싱+탐지&font=noto-sans-kr",
+                hashtags: ["#AI보안", "#LLM응용", "#BDI분석", "#팀리딩"],
                 duration: "2025.03 - 2025.04 (1개월)",
                 role: "AI 연구, 팀 리더",
                 challenge: `
@@ -557,7 +640,9 @@
                 company: "PUZZ 퍼즐시스템즈",
                 title: "Open Source 모델 학습 및 RAG를 통한 TBM 생성 AI",
                 shortDesc: "매일 반복되는 건설 현장 TBM 문서 작업, 이제 AI가 초안을 똑똑하게 만들어줍니다.",
-                image: "https://placehold.co/600x400/FDBA74/1E293B?text=TBM+AI+생성+문서+예시",
+                image: "https://placehold.co/600x400/FDBA74/3B82F6?text=TBM+AI+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/FDBA74/1E293B?text=TBM+AI&font=noto-sans-kr",
+                hashtags: ["#건설AI", "#OpenSourceLLM", "#RAG", "#협업", "#기술리드"],
                 duration: "2024.12 - 2025.02 (3개월)",
                 role: "AI 연구, 기술 리드",
                 challenge: `
@@ -593,7 +678,9 @@
                 company: "PUZZ 퍼즐시스템즈",
                 title: "Multi-Agent를 활용한 앱 개발 방법론 고안 및 아키텍처 설계",
                 shortDesc: "여러 AI 모델과 서비스가 손발을 맞추듯 협력하는 Multi-Agent 시스템, 개발 생산성을 극대화합니다.",
-                image: "https://placehold.co/600x400/818CF8/1E293B?text=Multi-Agent+아키텍처",
+                image: "https://placehold.co/600x400/818CF8/3B82F6?text=Multi-Agent+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/818CF8/1E293B?text=Multi-Agent&font=noto-sans-kr",
+                hashtags: ["#AI아키텍처", "#MultiAgent", "#개발방법론", "#생산성향상"],
                 duration: "2025.01 - 2025.02 (2개월)",
                 role: "AI 연구",
                 challenge: `
@@ -629,7 +716,9 @@
                 company: "개인 프로젝트",
                 title: "AI 자기소개서 작성 서비스 제작 (LangChain 활용)",
                 shortDesc: "기업명, 직무명, 이력서 첨부만으로 합격률 높은 자기소개서를 빠르게 완성하는 AI 서비스입니다.",
-                image: "https://placehold.co/600x400/67E8F9/1E293B?text=AI+자소서+서비스+UI",
+                image: "https://placehold.co/600x400/67E8F9/3B82F6?text=AI+자소서+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/67E8F9/1E293B?text=AI+자소서&font=noto-sans-kr",
+                hashtags: ["#1인개발MVP", "#LangChain", "#사용자중심", "#LLM서비스"],
                 duration: "2024.11 - 2025.02 (4개월)",
                 role: "PO, 1인 개발 (LangChain, Search GPT, ChatGPT 활용)",
                 challenge: `
@@ -674,6 +763,8 @@
                 title: "FAKER의 비밀 분석 콘텐츠 기획: '인비저블 썸띵' 증명",
                 shortDesc: "조롱을 감탄으로! 데이터와 심층 분석으로 페이커 선수의 보이지 않는 가치를 증명한 200만 뷰 콘텐츠",
                 image: "image_9382eb.png", 
+                pictogramImage: "https://placehold.co/300x200/FBCFE8/1E293B?text=226만뷰+달성&font=noto-sans-kr", 
+                hashtags: ["#콘텐츠기획", "#데이터분석", "#여론반전", "#스토리텔링", "#e스포츠"],
                 duration: "2023.07 - 2023.08",
                 role: "PM, 콘텐츠 기획",
                 challenge: `
@@ -723,7 +814,9 @@
                 company: "유튜브 채널 'LCK CRACKER'",
                 title: "조회 수 40만 롱폼 영상 제작을 통한 구독자 유지 및 신규 팬 유입",
                 shortDesc: "스토리텔링형 콘텐츠로 핵심 팬층을 사로잡고 신규 팬을 유입시키다.",
-                image: "https://placehold.co/600x400/DDD6FE/1E293B?text=LCK+CRACKER+롱폼+썸네일",
+                image: "https://placehold.co/600x400/DDD6FE/3B82F6?text=롱폼+콘텐츠+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/DDD6FE/1E293B?text=롱폼+37만뷰&font=noto-sans-kr",
+                hashtags: ["#콘텐츠전략", "#구독자유지", "#스토리텔링"],
                 duration: "2023.01 - 2023.12",
                 role: "PM",
                 challenge: `
@@ -757,7 +850,9 @@
                 company: "유튜브 채널 'LCK CRACKER'",
                 title: "종목 내 신규 데이터 지표 '골드 수급률' 개발 및 공식 채널 반영 기여",
                 shortDesc: "팬들의 경기 이해도를 높인 신규 지표 '골드 수급률', 공식 채널까지 진출!",
-                image: "https://placehold.co/600x400/A7F3D0/1E293B?text=골드+수급률+지표+설명",
+                image: "https://placehold.co/600x400/A7F3D0/3B82F6?text=골드수급률+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/A7F3D0/1E293B?text=골드수급률+공식반영&font=noto-sans-kr",
+                hashtags: ["#데이터지표개발", "#팬인게이지먼트", "#콘텐츠차별화"],
                 duration: "2023.01 - 2023.12",
                 role: "PM",
                 challenge: `
@@ -793,6 +888,8 @@
                 title: "주식 분석 서비스 'Butler' - 홍보비 0원으로 초기 유저 20,000명 확보 전략",
                 shortDesc: "기업 분석 콘텐츠의 가치를 통해 팬덤을 형성하고, 마케팅 비용 없이 성공적인 초기 시장 진입을 이끌었습니다.",
                 image: "image_9391d1.jpg", 
+                pictogramImage: "https://placehold.co/300x200/BFDBFE/1E293B?text=유저+2만명+확보&font=noto-sans-kr",
+                hashtags: ["#그로스해킹", "#커뮤니티마케팅", "#PMF검증", "#콘텐츠전략"],
                 duration: "2021.05 - 2022.01 (이력서 기준) / 2021.03 - 2021.11 (PDF 6쪽 기준)",
                 role: "서비스 기획, 초기 유저 확보 전략 기획 및 실행",
                 challenge: `
@@ -836,7 +933,9 @@
                 company: "주식회사그로잉랩",
                 title: "데이터 기반 메인 페이지 개선, '버틀러' 유저 참여도 80% 증가",
                 shortDesc: "데이터 분석으로 문제점을 진단하고 UI 개선을 통해 유저 참여도를 극적으로 향상시켰습니다.",
-                image: "https://placehold.co/600x400/BAE6FD/1E293B?text=버틀러+메인+개선+전후",
+                image: "https://placehold.co/600x400/BAE6FD/3B82F6?text=참여도+80%25+증가+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/BAE6FD/1E293B?text=참여도+80%25↑&font=noto-sans-kr",
+                hashtags: ["#데이터기반개선", "#UIUX", "#사용자행동분석"],
                 duration: "2021.03 - 2022.04",
                 role: "서비스 기획",
                 challenge: `
@@ -870,7 +969,9 @@
                 company: "주식회사그로잉랩",
                 title: "시장 분석 통한 신규 기능 출시, 유저 참여도 117% 및 평균 참여시간 67% 증가",
                 shortDesc: "국내 최초 부문별 실적 시각화 기능 출시로 서비스 차별화 및 유저 충성도 강화",
-                image: "https://placehold.co/600x400/C4B5FD/1E293B?text=실적+시각화+기능+UI",
+                image: "https://placehold.co/600x400/C4B5FD/3B82F6?text=참여도+117%25+증가+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/C4B5FD/1E293B?text=참여도+117%25↑&font=noto-sans-kr",
+                hashtags: ["#시장분석", "#신규기능기획", "#사용자조사", "#프로젝트관리"],
                 duration: "2022.08 - 2022.10",
                 role: "서비스 기획",
                 challenge: `
@@ -904,7 +1005,9 @@
                 company: "주식회사그로잉랩",
                 title: "분석 서비스 '버틀러(butler.works)' 초기 서비스 기획",
                 shortDesc: "기업 분석을 가장 쉽게 만드는 서비스의 청사진을 그리다.",
-                image: "https://placehold.co/600x400/F87171/1E293B?text=버틀러+초기+기획+자료",
+                image: "https://placehold.co/600x400/F87171/3B82F6?text=서비스+기획+아이콘&font=noto-sans-kr",
+                pictogramImage: "https://placehold.co/300x200/F87171/1E293B?text=서비스+초기기획&font=noto-sans-kr",
+                hashtags: ["#서비스기획", "#시장조사", "#와이어프레임", "#프로덕트디자인"],
                 duration: "2022.02 - 2022.12 (이력서 기준)",
                 role: "서비스 기획 (핵심 멤버)",
                 challenge: `
@@ -939,7 +1042,9 @@
                 company: "육군 창업경진대회",
                 title: "생고기 배달서비스 '래고_Let's 고기' 아이디어, '한국경제신문사장상' 수상",
                 shortDesc: "배달 시장의 니즈를 파악한 혁신적인 아이디어로 창업경진대회에서 수상했습니다.",
-                image: "https://placehold.co/600x400/FECACA/1E293B?text=레고+서비스+컨셉", 
+                image: "https://placehold.co/600x400/FECACA/3B82F6?text=창업경진대회+아이콘&font=noto-sans-kr", 
+                pictogramImage: "https://placehold.co/300x200/FECACA/1E293B?text=창업경진대회+수상&font=noto-sans-kr",
+                hashtags: ["#아이디어기획", "#사업모델", "#시장분석", "#경험디자인"],
                 duration: "2019.05 - 2019.07",
                 role: "아이디어 기획",
                 challenge: `
@@ -1000,6 +1105,30 @@
                     }
                 }
 
+                // AI 요약 기능 HTML (모든 프로젝트에 공통으로 추가)
+                let aiSummarySectionHtml = `
+                    <div class="mt-8 pt-4 border-t">
+                        <button id="aiSummaryButton_${project.id}" class="gemini-feature-button">✨ AI 프로젝트 요약 보기</button>
+                        <div id="aiSummaryLoading_${project.id}" class="mt-2 text-sm text-slate-500" style="display:none;">AI가 요약 중...</div>
+                        <div id="aiSummaryResult_${project.id}" class="gemini-output mt-2" style="display:none;"></div>
+                    </div>
+                `;
+
+                // AI 자기소개서 데모 기능 HTML (특정 프로젝트에만 추가)
+                let resumeDemoHtml = '';
+                if (project.id === "personal_resume_ai") {
+                    resumeDemoHtml = `
+                        <div class="mt-6 pt-4 border-t">
+                            <h3 class="subsection-title text-slate-800">✨ AI 자기소개서 도입부 생성 (미니 데모)</h3>
+                            <p class="text-sm text-slate-600 mb-2">회사/직무 관련 키워드를 입력해보세요. (예: 삼성전자, AI 엔지니어, 도전정신)</p>
+                            <input type="text" id="resumeKeywords_${project.id}" class="w-full p-2 border border-slate-300 rounded-md mb-2" placeholder="키워드 입력...">
+                            <button id="generateResumeIntroButton_${project.id}" class="gemini-feature-button">✨ 도입부 생성하기</button>
+                            <div id="resumeIntroLoading_${project.id}" class="mt-2 text-sm text-slate-500" style="display:none;">AI가 도입부 생성 중...</div>
+                            <div id="resumeIntroResult_${project.id}" class="gemini-output mt-2" style="display:none;"></div>
+                        </div>
+                    `;
+                }
+
                 modalBody.innerHTML = `
                     <h2 class="text-3xl font-bold mb-4 text-blue-600">${project.title}</h2>
                     <p class="text-sm text-slate-500 mb-1">${project.duration}</p>
@@ -1018,11 +1147,157 @@
                     
                     <h3 class="subsection-title text-slate-800">사용 기술 (Tech Stack)</h3>
                     <div class="mb-4">${techList}</div>
+                    ${aiSummarySectionHtml}
+                    ${resumeDemoHtml}
                 `;
                 projectModalElement.style.display = "block";
+
+                // Add event listener for the AI Summary button
+                const aiSummaryButton = document.getElementById(`aiSummaryButton_${project.id}`);
+                if (aiSummaryButton) {
+                    aiSummaryButton.onclick = () => generateAiSummary(project);
+                }
+
+                // Add event listener for the Resume Intro button (if it exists)
+                if (project.id === "personal_resume_ai") {
+                    const generateResumeButton = document.getElementById(`generateResumeIntroButton_${project.id}`);
+                    if (generateResumeButton) {
+                        generateResumeButton.onclick = () => generateResumeIntro(project.id);
+                    }
+                }
             }
         }
         
+        async function generateAiSummary(project) {
+            const loadingDiv = document.getElementById(`aiSummaryLoading_${project.id}`);
+            const resultDiv = document.getElementById(`aiSummaryResult_${project.id}`);
+            const button = document.getElementById(`aiSummaryButton_${project.id}`);
+
+            if (!loadingDiv || !resultDiv || !button) return;
+
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+            resultDiv.textContent = '';
+            button.disabled = true;
+
+            // Extract text from HTML (basic extraction, might need refinement if HTML is complex)
+            const extractText = (htmlString) => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlString;
+                return tempDiv.textContent || tempDiv.innerText || "";
+            };
+            
+            const challengeText = extractText(project.challenge);
+            const solutionText = extractText(project.solution);
+            const impactText = extractText(project.impact);
+
+            const combinedText = `
+                도전 과제: ${challengeText}\n
+                해결 과정: ${solutionText}\n
+                핵심 성과: ${impactText}
+            `.replace(/\s+/g, ' ').trim(); // Normalize whitespace
+
+
+            const prompt = `다음 프로젝트 내용을 한국어로 2-3문장으로 요약해줘. 문제점, 해결 방식, 그리고 주요 결과에 초점을 맞춰서 핵심만 간결하게 요약해줘:\n\n${combinedText}`;
+            
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API 요청 실패: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const summaryText = result.candidates[0].content.parts[0].text;
+                    resultDiv.textContent = summaryText;
+                    resultDiv.style.display = 'block';
+                } else {
+                    resultDiv.textContent = 'AI 요약을 생성하는 데 실패했습니다. 응답 형식이 올바르지 않습니다.';
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('AI 요약 생성 중 오류:', error);
+                resultDiv.textContent = `AI 요약 생성 중 오류가 발생했습니다: ${error.message}`;
+                resultDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        async function generateResumeIntro(projectId) {
+            const keywordsInput = document.getElementById(`resumeKeywords_${projectId}`);
+            const loadingDiv = document.getElementById(`resumeIntroLoading_${projectId}`);
+            const resultDiv = document.getElementById(`resumeIntroResult_${projectId}`);
+            const button = document.getElementById(`generateResumeIntroButton_${projectId}`);
+
+            if (!keywordsInput || !loadingDiv || !resultDiv || !button) return;
+
+            const keywords = keywordsInput.value.trim();
+            if (!keywords) {
+                resultDiv.textContent = '자기소개서 작성을 위한 키워드를 입력해주세요.';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+            resultDiv.textContent = '';
+            button.disabled = true;
+
+            const prompt = `다음 키워드를 바탕으로 한국어로 자기소개서의 매력적인 도입부 한 문장을 작성해줘: "${keywords}"`;
+
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API 요청 실패: ${response.status}`);
+                }
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const introText = result.candidates[0].content.parts[0].text;
+                    resultDiv.textContent = introText;
+                    resultDiv.style.display = 'block';
+                } else {
+                    resultDiv.textContent = '도입부 생성에 실패했습니다. 응답 형식이 올바르지 않습니다.';
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('AI 도입부 생성 중 오류:', error);
+                resultDiv.textContent = `AI 도입부 생성 중 오류가 발생했습니다: ${error.message}`;
+                resultDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+
         function openImageModal(src) {
             imageModalElement.style.display = "block";
             modalImage.src = src;
@@ -1065,12 +1340,26 @@
             projectsGrid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-8';
 
             projectsData.filter(p => p.company === company).forEach(project => {
+                // achievementTag는 projectsData에서 제거되었으므로 해당 HTML 생성 로직 제거
+                // let achievementTagHtml = ''; 
+                // if (project.achievementTag) { ... }
+
+                let hashtagsHtml = '';
+                if (project.hashtags && project.hashtags.length > 0) {
+                    hashtagsHtml = '<div class="project-hashtags-container">';
+                    project.hashtags.forEach(tag => {
+                        hashtagsHtml += `<span class="project-hashtag">#${tag}</span>`; 
+                    });
+                    hashtagsHtml += '</div>';
+                }
+
                 const card = `
                     <div class="card p-6 cursor-pointer flex flex-col justify-between" onclick="openProjectModal('${project.id}')">
                         <div>
-                            <img src="${project.image}" alt="${project.title} 썸네일" class="w-full h-48 object-cover rounded-md mb-4">
-                            <h4 class="text-xl font-semibold mb-2 text-blue-600">${project.title}</h4>
-                            <p class="text-slate-600 text-sm mb-3 h-16 overflow-hidden">${project.shortDesc}</p>
+                            <img src="${project.pictogramImage || project.image}" alt="${project.title} 썸네일" class="card-pictogram-image rounded-md mb-2">
+                            ${hashtagsHtml} 
+                            <h4 class="text-xl font-semibold mt-1 mb-2 text-blue-600">${project.title}</h4>
+                            <p class="text-slate-600 text-sm mb-3 h-12 overflow-hidden">${project.shortDesc}</p> 
                         </div>
                         <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 mt-4">상세 보기</button>
                     </div>
