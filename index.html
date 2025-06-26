@@ -467,7 +467,7 @@
             <div class="max-w-3xl mx-auto">
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    <h3 class="text-xl font-semibold text-blue-600 mb-1">PUZZ 퍼즐시스템즈</h3>
+                    <h3 class="text-xl font-semibold text-blue-600 mb-1">퍼즐시스템즈</h3>
                     <p class="text-sm text-slate-500 mb-1">AI 연구 (정규직) | 2024.12 - 재직 중 (6개월)</p>
                     <ul class="list-disc list-inside ml-4 text-slate-700 space-y-1">
                         <li>내부 문서 기반 AI 인사이트/리포트 생성 서비스 프로토타입 개발</li>
@@ -558,10 +558,10 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         const projectsData = [
-            // PUZZ 퍼즐시스템즈 Projects
+            // 퍼즐시스템즈 Projects
             {
                 id: "puzz_insight_reporter",
-                company: "PUZZ 퍼즐시스템즈",
+                company: "퍼즐시스템즈",
                 title: "내부 문서 기반 AI 인사이트/리포트 생성 서비스 프로토타입",
                 shortDesc: "사내 방대한 문서를 똑똑하게 분석하여, 필요한 인사이트만 빠르게 찾아주는 AI 비서",
                 image: "https://placehold.co/600x400/A5B4FC/3B82F6?text=AI+리포터+아이콘&font=noto-sans-kr", 
@@ -600,11 +600,11 @@
             },
             {
                 id: "puzz_voice_phishing",
-                company: "PUZZ 퍼즐시스템즈",
+                company: "퍼즐시스템즈",
                 title: "LLM의 BDI 분석을 통한 Voice Phishing 100% 탐지 모델",
                 shortDesc: "지능화되는 보이스피싱, AI가 발화 의도까지 파악하여 100% 막아냅니다.",
-                image: "https://placehold.co/600x400/FCA5A5/3B82F6?text=보이스피싱+탐지+아이콘&font=noto-sans-kr",
-                pictogramImage: "https://placehold.co/300x200/FCA5A5/1E293B?text=보이스피싱+탐지&font=noto-sans-kr",
+                image: "https://raw.githubusercontent.com/YEOPHYEONG/portfolio/main/Voice%20phishing.JPG",
+                pictogramImage: "https://raw.githubusercontent.com/YEOPHYEONG/portfolio/main/Voice%20phishing.JPG",
                 hashtags: ["#AI보안", "#LLM응용", "#BDI분석", "#팀리딩"],
                 duration: "2025.03 - 2025.04 (1개월)",
                 role: "AI 연구, 팀 리더",
@@ -637,7 +637,7 @@
             },
             {
                 id: "puzz_tbm_ai",
-                company: "PUZZ 퍼즐시스템즈",
+                company: "퍼즐시스템즈",
                 title: "Open Source 모델 학습 및 RAG를 통한 TBM 생성 AI",
                 shortDesc: "매일 반복되는 건설 현장 TBM 문서 작업, 이제 AI가 초안을 똑똑하게 만들어줍니다.",
                 image: "https://placehold.co/600x400/FDBA74/3B82F6?text=TBM+AI+아이콘&font=noto-sans-kr",
@@ -675,7 +675,7 @@
             },
             {
                 id: "puzz_multi_agent",
-                company: "PUZZ 퍼즐시스템즈",
+                company: "퍼즐시스템즈",
                 title: "Multi-Agent를 활용한 앱 개발 방법론 고안 및 아키텍처 설계",
                 shortDesc: "여러 AI 모델과 서비스가 손발을 맞추듯 협력하는 Multi-Agent 시스템, 개발 생산성을 극대화합니다.",
                 image: "https://placehold.co/600x400/818CF8/3B82F6?text=Multi-Agent+아이콘&font=noto-sans-kr",
@@ -1322,7 +1322,7 @@
 
         // Populate project cards by company
         const companies = [...new Set(projectsData.map(p => p.company))];
-        const companyOrder = ["PUZZ 퍼즐시스템즈", "개인 프로젝트", "유튜브 채널 'LCK CRACKER'", "주식회사그로잉랩", "육군 창업경진대회"];
+        const companyOrder = ["퍼즐시스템즈", "개인 프로젝트", "유튜브 채널 'LCK CRACKER'", "주식회사그로잉랩", "육군 창업경진대회"];
         
         companies.sort((a, b) => {
             let indexA = companyOrder.indexOf(a);
