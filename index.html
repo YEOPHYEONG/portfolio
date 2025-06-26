@@ -606,7 +606,7 @@
                 pictogramImage: "https://raw.githubusercontent.com/YEOPHYEONG/portfolio/main/Voice%20phishing.JPG",
                 hashtags: ["#AI보안", "#LLM응용", "#BDI분석", "#팀리딩"],
                 duration: "2025.03 - 2025.04 (1개월)",
-                role: "AI 연구, 팀 리더",
+                role: "AI 모델 개발발",
                 challenge: `
                     <ul>
                         <li><strong>문제 발견:</strong> 기존 보이스피싱 탐지 모델의 정확도 한계 및 패턴 지능화로 인한 탐지율 저하.</li>
@@ -632,7 +632,7 @@
                     </ul>`,
                 techStack: ["LLM (3B)", "BDI Reasoning Distillation", "LoRA Fine-tuning", "Python"],
                 relatedLinks: [
-                    { name: "HuggingFace 모델 저장소", url: "https://huggingface.co/YEOPHYEONG/qwen2.5-bdi-lora" }, // 실제 URL로 교체해주세요
+                    { name: "HuggingFace 모델 저장소", url: "https://huggingface.co/YEOPHYEONG/qwen2.5-bdi-lora" }, 
                 ],
                 detailedImages: [],
                 visuals_needed: ["BDI 모델 개념도", "탐지 성능 비교 그래프", "모델 학습 과정 플로우 차트"]
@@ -1089,6 +1089,35 @@
             const project = projectsData.find(p => p.id === projectId);
             if (project) {
                 let techList = project.techStack.map(tag => `<span class="skill-tag">${tag}</span>`).join('');
+                let relatedLinksHtml = '';
+                if (project.relatedLinks && project.relatedLinks.length > 0) {
+                    let links = project.relatedLinks.map(link =>
+                        `<a href="${link.url}" target="_blank" class="inline-block bg-indigo-100 text-indigo-700 font-semibold py-1 px-3 rounded-md text-sm hover:bg-indigo-200 transition duration-300 mr-2 mb-2">
+                            ${link.name} <i class="fas fa-external-link-alt text-xs ml-1"></i>
+                        </a>`
+                    ).join('');
+                    relatedLinksHtml = `
+                        <h3 class="subsection-title text-slate-800">관련 링크 (Related Links)</h3>
+                        <div class="mb-4">${links}</div>
+                    `;
+                }
+        
+                let aiSummarySectionHtml = `...`; // 기존 AI 요약 부분
+                let resumeDemoHtml = `...`; // 기존 자기소개서 데모 부분
+        
+                // ✅ modalBody.innerHTML 안에 ${relatedLinksHtml} 변수를 추가합니다.
+                modalBody.innerHTML = `
+                    <h2 class="text-3xl font-bold mb-4 text-blue-600">${project.title}</h2>
+                    // ... (기존 내용) ...
+                    <h3 class="subsection-title text-slate-800">사용 기술 (Tech Stack)</h3>
+                    <div class="mb-4">${techList}</div>
+        
+                    ${relatedLinksHtml}
+        
+                    ${aiSummarySectionHtml}
+                    ${resumeDemoHtml}
+                `;
+                projectModalElement.style.display = "block";
                 
                 let detailedImagesHtml = '';
                 if (project.detailedImages && project.detailedImages.length > 0) {
